@@ -1,16 +1,21 @@
 package com.bulish.melnikov.converter.fabric;
 
 
-import com.bulish.melnikov.converter.convert.PdfToDocxConverter;
-import com.bulish.melnikov.converter.convert.PdfToHtmlConverter;
-import com.bulish.melnikov.converter.convert.PdfToImageConverter;
-import com.bulish.melnikov.converter.convert.PdfToTextConverter;
+import com.bulish.melnikov.converter.convert.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+
+@Component
 public class PdfFileFabric extends FileFabric {
-    public PdfFileFabric() {
-        converters.put("docx", new PdfToDocxConverter());
-        converters.put("html", new PdfToHtmlConverter());
-        converters.put("txt", new PdfToTextConverter());
-        converters.put("image", new PdfToImageConverter());
+
+    @Autowired
+    public PdfFileFabric(List<PdfConverter> converters) {
+        super("pdf");
+        for (PdfConverter converter : converters) {
+            this.converters.put(converter.getFormat(), converter);
+        }
     }
 }
+

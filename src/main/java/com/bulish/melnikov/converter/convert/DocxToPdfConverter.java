@@ -1,8 +1,15 @@
 package com.bulish.melnikov.converter.convert;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-public class DocxToPDFConverter implements Converter {
+@Component
+public class DocxToPdfConverter extends DocxConverter {
+
+    public DocxToPdfConverter() {
+        super("pdf");
+    }
+
     @Override
     public byte[] convert(MultipartFile file) {
         return new byte[0];
