@@ -1,7 +1,7 @@
 package com.bulish.melnikov.converter.controller;
 
-import com.bulish.melnikov.converter.fabric.ConverterFactory;
-import com.bulish.melnikov.converter.service.FileConversionService;
+import com.bulish.melnikov.converter.model.ConvertRequest;
+import com.bulish.melnikov.converter.service.ConverterFileService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,15 +14,13 @@ import java.io.IOException;
 
 @RestController
 @AllArgsConstructor
-public class FileConversionController {
+public class ConverterFileController {
 
-    private final FileConversionService fileConversionService;
-    private  final ConverterFactory converterFactory;
-
+    private final ConverterFileService converterFileService;
 
     @PostMapping("/convert")
     @ResponseStatus(HttpStatus.OK)
-    public byte [] convert(@RequestParam("file") MultipartFile file, @RequestParam("toFormat") String toFormat) throws IOException {
-        return fileConversionService.performConversion(file, toFormat);
+    public ConvertRequest convert(@RequestParam("file") MultipartFile file, @RequestParam("toFormat") String toFormat) throws IOException {
+        return converterFileService.requestToConvert(file, toFormat);
     }
 }
