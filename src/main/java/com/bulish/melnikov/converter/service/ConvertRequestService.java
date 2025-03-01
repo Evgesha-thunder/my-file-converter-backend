@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ConvertRequestService {
 
-    private final ConverterRequestRepository fileRepo;
-    public ConvertRequest save(ConvertRequest convertRequestId){
-        return fileRepo.save(convertRequestId);
+    private final ConverterRequestRepository requestRepo;
+
+    public ConvertRequest save(ConvertRequest convertRequest){
+        return requestRepo.save(convertRequest);
     }
 
     public ConvertRequest get(String convertRequestId){
-        return fileRepo.findById(convertRequestId).orElseThrow(()
+        return requestRepo.findById(convertRequestId).orElseThrow(()
                 -> new RuntimeException("File not found"));
     }
 
@@ -24,13 +25,12 @@ public class ConvertRequestService {
 
         convertRequestFromRedis.setState(convertRequest.getState());
 
-        delete(convertRequestId);
-        fileRepo.save(convertRequestFromRedis);
+        requestRepo.save(convertRequestFromRedis);
 
         return convertRequestFromRedis;
     }
 
     public void delete(String convertRequestId){
-        fileRepo.deleteById(convertRequestId);
+        requestRepo.deleteById(convertRequestId);
     }
 }

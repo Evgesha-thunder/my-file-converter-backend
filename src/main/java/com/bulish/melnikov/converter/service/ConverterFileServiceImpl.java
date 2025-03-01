@@ -5,7 +5,6 @@ import com.bulish.melnikov.converter.exception.IncorrectFormatExtensionException
 import com.bulish.melnikov.converter.fabric.ConverterFactory;
 import com.bulish.melnikov.converter.fabric.FileFabric;
 import com.bulish.melnikov.converter.model.ConvertRequest;
-import com.bulish.melnikov.converter.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,17 +46,30 @@ public class ConverterFileServiceImpl implements ConverterFileService {
           throw new RuntimeException("Error uploading file");
         }
 
-        ConvertRequest convertRequest = new ConvertRequest(State.INIT);
+        ConvertRequest convertRequest = new ConvertRequest();
         convertRequestService.save(convertRequest);
 
         return convertRequest;
     }
 
     public boolean uploadFileToLocalSystem(MultipartFile file) {
+        String originalFileName = file.getOriginalFilename();
+        Path filePath = Paths.get(dirUpload + originalFileName);
+        String newFileName = originalFileName;
+        int fileCount = 0;
+
+        while (Files.exists(filePath)) {
+            fileCount++;
+
+            String fileNameWithoutExt = getFileNameWithoutExtension(originalFileName);
+            String fileExtension = getFileExtension(originalFileName);
+            newFileName = String.format("%s(%d)%s%s", fileNameWithoutExt, fileCount, fileExtension.isEmpty() ? "" : ".", fileExtension);
+            filePath = Paths.get(dirUpload + newFileName);
+        }
+
         try {
             Files.createDirectories(Paths.get(dirUpload));
-            Path filePath = Paths.get(dirUpload + file.getOriginalFilename());
-            Files.write(filePath, file.getBytes());
+            file.transferTo(filePath);
         } catch (IOException e) {
             log.error("Error uploading file", e);
 
@@ -75,5 +87,14 @@ public class ConverterFileServiceImpl implements ConverterFileService {
         }
 
         return "";
+    }
+
+    private String getFileNameWithoutExtension(String fileName) {
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex == -1) {
+            return fileName;
+        } else {
+            return fileName.substring(0, lastDotIndex);
+        }
     }
 }
