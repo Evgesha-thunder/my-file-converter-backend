@@ -57,13 +57,13 @@ public class ConverterFileServiceImpl implements ConverterFileService {
         Path filePath = Paths.get(dirUpload + originalFileName);
         String newFileName = originalFileName;
         int fileCount = 0;
+        String fileNameWithoutExt = getFileNameWithoutExtension(originalFileName);
+        String fileExtension = getFileExtension(originalFileName);
+        fileExtension = fileExtension.isEmpty() ? "" : "." + fileExtension;
 
         while (Files.exists(filePath)) {
             fileCount++;
-
-            String fileNameWithoutExt = getFileNameWithoutExtension(originalFileName);
-            String fileExtension = getFileExtension(originalFileName);
-            newFileName = String.format("%s(%d)%s%s", fileNameWithoutExt, fileCount, fileExtension.isEmpty() ? "" : ".", fileExtension);
+            newFileName = String.format("%s(%d)%s%s", fileNameWithoutExt, fileCount, fileExtension);
             filePath = Paths.get(dirUpload + newFileName);
         }
 
