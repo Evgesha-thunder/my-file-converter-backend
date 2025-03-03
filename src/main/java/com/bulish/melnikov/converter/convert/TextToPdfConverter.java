@@ -1,7 +1,6 @@
 package com.bulish.melnikov.converter.convert;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class TextToPdfConverter extends TextConverter {
@@ -10,7 +9,7 @@ public class TextToPdfConverter extends TextConverter {
     }
 
     @Override
-    public byte[] convert(MultipartFile file) {
+    public byte[] convert(String filePath) {
         return new byte[0];
     }
 }

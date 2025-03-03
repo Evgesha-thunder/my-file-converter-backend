@@ -4,7 +4,10 @@ import com.bulish.melnikov.converter.convert.Converter;
 import com.bulish.melnikov.converter.exception.IncorrectFormatExtensionException;
 import com.bulish.melnikov.converter.fabric.ConverterFactory;
 import com.bulish.melnikov.converter.fabric.FileFabric;
+import com.bulish.melnikov.converter.mapper.ConvertRequestToConvertResponseMapper;
+import com.bulish.melnikov.converter.model.ConversionTask;
 import com.bulish.melnikov.converter.model.ConvertRequest;
+import com.bulish.melnikov.converter.model.ConvertResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,11 +25,13 @@ public class ConverterFileServiceImpl implements ConverterFileService {
 
     private final ConverterFactory converterFactory;
     private final ConvertRequestService convertRequestService;
+    private final ConverterTaskQueueManagerServiceImpl queueService;
+    private final ConvertRequestToConvertResponseMapper requestToConvertResponseMapper;
 
     private final String dirUpload = "temp/files/";
 
     @Override
-    public ConvertRequest requestToConvert(MultipartFile fileToConvert, String toFormat) {
+    public ConvertResponse requestToConvert(MultipartFile fileToConvert, String toFormat) {
         String extension = getFileExtension(fileToConvert.getOriginalFilename());
         FileFabric fileFabric = converterFactory.getFactory(extension);
 
@@ -40,43 +45,45 @@ public class ConverterFileServiceImpl implements ConverterFileService {
             throw new IncorrectFormatExtensionException("Unsupported file format toFormat");
         }
 
-        boolean isUploaded = uploadFileToLocalSystem(fileToConvert);
+        String filePath = uploadFileToLocalSystem(fileToConvert);
 
-        if (!isUploaded) {
+        if (filePath == null) {
           throw new RuntimeException("Error uploading file");
         }
 
-        ConvertRequest convertRequest = new ConvertRequest();
+        ConvertRequest convertRequest = new ConvertRequest(filePath);
         convertRequestService.save(convertRequest);
 
-        return convertRequest;
+        queueService.addToTaskQueue(new ConversionTask(filePath, converter));
+
+        return requestToConvertResponseMapper.convertRequestToConvertResponse(convertRequest);
     }
 
-    public boolean uploadFileToLocalSystem(MultipartFile file) {
+    public String uploadFileToLocalSystem(MultipartFile file) {
+        String filePath = null;
         String originalFileName = file.getOriginalFilename();
-        Path filePath = Paths.get(dirUpload + originalFileName);
+        Path path = Paths.get(dirUpload + originalFileName);
         String newFileName = originalFileName;
         int fileCount = 0;
         String fileNameWithoutExt = getFileNameWithoutExtension(originalFileName);
         String fileExtension = getFileExtension(originalFileName);
         fileExtension = fileExtension.isEmpty() ? "" : "." + fileExtension;
 
-        while (Files.exists(filePath)) {
+        while (Files.exists(path)) {
             fileCount++;
-            newFileName = String.format("%s(%d)%s%s", fileNameWithoutExt, fileCount, fileExtension);
-            filePath = Paths.get(dirUpload + newFileName);
+            newFileName = String.format("%s(%d)%s", fileNameWithoutExt, fileCount, fileExtension);
+            path = Paths.get(dirUpload + newFileName);
         }
 
         try {
             Files.createDirectories(Paths.get(dirUpload));
-            file.transferTo(filePath);
+            file.transferTo(path);
+            filePath = path.toString();
         } catch (IOException e) {
             log.error("Error uploading file", e);
-
-            return false;
         }
 
-        return true;
+        return filePath;
     }
 
     private String getFileExtension(String fileName) {

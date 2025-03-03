@@ -17,7 +17,10 @@ public class ConvertRequest {
 
     private State state;
 
-    public ConvertRequest() {
+    private String filePath;
+
+    public ConvertRequest(String filePath) {
+        this.filePath = filePath;
         this.state = State.INIT;
         this.id = UUID.randomUUID().toString();
     }

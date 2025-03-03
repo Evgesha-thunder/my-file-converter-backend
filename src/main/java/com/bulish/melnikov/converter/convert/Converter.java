@@ -10,7 +10,7 @@ public abstract class Converter {
         this.format = format;
     }
 
-    public abstract byte [] convert(MultipartFile file);
+    public abstract byte [] convert(String filePath);
     public String getFormat() {
         return format;
     }
