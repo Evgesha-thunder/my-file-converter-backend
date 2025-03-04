@@ -2,6 +2,8 @@ package com.bulish.melnikov.converter.convert;
 
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+
 @Component
 public class PdfToHtmlConverter extends PdfConverter {
     public PdfToHtmlConverter() {
@@ -9,7 +11,7 @@ public class PdfToHtmlConverter extends PdfConverter {
     }
 
     @Override
-    public byte[] convert(String filePath) {
-        return new byte[0];
+    public File convert(File file) {
+        return null;
     }
 }
