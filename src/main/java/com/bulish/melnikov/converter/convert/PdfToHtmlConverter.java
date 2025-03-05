@@ -1,7 +1,8 @@
 package com.bulish.melnikov.converter.convert;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 
 @Component
 public class PdfToHtmlConverter extends PdfConverter {
@@ -10,7 +11,7 @@ public class PdfToHtmlConverter extends PdfConverter {
     }
 
     @Override
-    public byte[] convert(MultipartFile file) {
-        return new byte[0];
+    public File convert(File file) {
+        return null;
     }
 }

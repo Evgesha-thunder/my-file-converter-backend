@@ -1,6 +1,6 @@
 package com.bulish.melnikov.converter.controller;
 
-import com.bulish.melnikov.converter.model.ConvertRequest;
+import com.bulish.melnikov.converter.model.ConvertResponse;
 import com.bulish.melnikov.converter.service.ConverterFileService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class ConverterFileController {
 
     @PostMapping("/convert")
     @ResponseStatus(HttpStatus.OK)
-    public ConvertRequest convert(@RequestParam("file") MultipartFile file, @RequestParam("toFormat") String toFormat) throws IOException {
+    public ConvertResponse convert(@RequestParam("file") MultipartFile file, @RequestParam("toFormat") String toFormat) throws IOException {
         return converterFileService.requestToConvert(file, toFormat);
     }
 }

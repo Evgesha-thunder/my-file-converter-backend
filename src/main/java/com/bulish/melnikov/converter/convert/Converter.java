@@ -1,6 +1,7 @@
 package com.bulish.melnikov.converter.convert;
 
-import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 
 public abstract class Converter {
 
@@ -10,7 +11,7 @@ public abstract class Converter {
         this.format = format;
     }
 
-    public abstract byte [] convert(MultipartFile file);
+    public abstract File convert(File filePath);
     public String getFormat() {
         return format;
     }
