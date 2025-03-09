@@ -11,7 +11,7 @@ public class PdfToImageConverter extends PdfConverter {
     }
 
     @Override
-    public File convert(File filePath) {
+    public byte[] convert(File file) {
         return null;
     }
 }

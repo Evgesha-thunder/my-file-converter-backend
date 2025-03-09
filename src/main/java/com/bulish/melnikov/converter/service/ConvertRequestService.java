@@ -5,32 +5,14 @@ import com.bulish.melnikov.converter.repository.ConverterRequestRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
-@AllArgsConstructor
-public class ConvertRequestService {
 
-    private final ConverterRequestRepository requestRepo;
+public interface ConvertRequestService {
 
-    public ConvertRequest save(ConvertRequest convertRequest){
-        return requestRepo.save(convertRequest);
-    }
+    public ConvertRequest save(ConvertRequest convertRequest);
 
-    public ConvertRequest get(String convertRequestId){
-        return requestRepo.findById(convertRequestId).orElseThrow(()
-                -> new RuntimeException("File not found"));
-    }
+    public ConvertRequest get(String convertRequestId);
 
-    public ConvertRequest update(String convertRequestId, ConvertRequest convertRequest){
-        ConvertRequest convertRequestFromRedis = get(convertRequestId);
+    public ConvertRequest update(String convertRequestId, ConvertRequest convertRequest);
 
-        convertRequestFromRedis.setState(convertRequest.getState());
-
-        requestRepo.save(convertRequestFromRedis);
-
-        return convertRequestFromRedis;
-    }
-
-    public void delete(String convertRequestId){
-        requestRepo.deleteById(convertRequestId);
-    }
+    public void delete(String convertRequestId);
 }

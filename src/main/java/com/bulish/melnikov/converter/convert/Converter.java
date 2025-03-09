@@ -1,8 +1,10 @@
 package com.bulish.melnikov.converter.convert;
 
+import lombok.Getter;
 
 import java.io.File;
 
+@Getter
 public abstract class Converter {
 
     private String format;
@@ -11,8 +13,5 @@ public abstract class Converter {
         this.format = format;
     }
 
-    public abstract File convert(File filePath);
-    public String getFormat() {
-        return format;
-    }
+    public abstract byte[] convert(File file);
 }

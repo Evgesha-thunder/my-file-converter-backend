@@ -4,5 +4,5 @@ import com.bulish.melnikov.converter.model.ConvertRequest;
 
 public interface ConverterRequestQueueManagerService {
 
-    void addToTaskQueue(ConvertRequest task);
+    void addRequestToQueue(ConvertRequest task);
 }

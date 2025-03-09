@@ -7,4 +7,8 @@ import java.io.IOException;
 
 public interface ConverterFileService {
     ConvertResponse requestToConvert(MultipartFile file, String toFormat) throws IOException;
+
+    ConvertResponse getRequestStatusById(String id);
+
+    byte[] downloadConvertedFile(String id);
 }

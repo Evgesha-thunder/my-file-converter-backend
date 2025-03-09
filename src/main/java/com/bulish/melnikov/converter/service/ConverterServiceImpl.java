@@ -29,18 +29,18 @@ public class ConverterServiceImpl implements ConverterService {
         Converter converter = fileFabric.getConverter(request.getFormatTo());
 
         File fileToConvert = fileService.getFile(request.getFilePath());
+        String convertedFilePath = null;
 
-        File convertedFile = null;
         try {
-            convertedFile = converter.convert(fileToConvert);
-            fileService.saveFile(convertedFile);
+            byte[] convertedFile = converter.convert(fileToConvert);
+            convertedFilePath = fileService.saveFile(convertedFile, request.getFormatTo(), fileToConvert.getName());
         } catch (IOException e) {
             request.setState(State.IN_ERROR);
             convertRequestService.save(request);
             throw new RuntimeException("Error converting file", e);
         }
 
-        request.setConvertedFilePath(convertedFile.getAbsolutePath());
+        request.setConvertedFilePath(convertedFilePath);
         request.setState(State.CONVERTED);
         convertRequestService.save(request);
     }
