@@ -28,7 +28,7 @@ public class ConverterFileController {
         return converterFileService.getRequestStatusById(id);
     }
 
-    @GetMapping("/download/{id}")
+    @GetMapping("/{id}/download")
     @ResponseStatus(HttpStatus.OK)
     public byte[] download(@PathVariable("id") String id) {
         return converterFileService.downloadConvertedFile(id);

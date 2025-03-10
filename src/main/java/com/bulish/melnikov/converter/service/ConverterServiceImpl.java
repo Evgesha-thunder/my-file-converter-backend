@@ -42,6 +42,6 @@ public class ConverterServiceImpl implements ConverterService {
 
         request.setConvertedFilePath(convertedFilePath);
         request.setState(State.CONVERTED);
-        convertRequestService.save(request);
+        convertRequestService.update(request);
     }
 }

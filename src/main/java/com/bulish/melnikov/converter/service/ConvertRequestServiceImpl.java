@@ -23,10 +23,11 @@ public class ConvertRequestServiceImpl implements ConvertRequestService {
     }
 
     @Override
-    public ConvertRequest update(String convertRequestId, ConvertRequest convertRequest){
-        ConvertRequest convertRequestFromRedis = get(convertRequestId);
+    public ConvertRequest update(ConvertRequest convertRequest){
+        ConvertRequest convertRequestFromRedis = get(convertRequest.getId());
 
         convertRequestFromRedis.setState(convertRequest.getState());
+        convertRequest.setConvertedFilePath(convertRequest.getConvertedFilePath());
 
         requestRepo.save(convertRequestFromRedis);
 
