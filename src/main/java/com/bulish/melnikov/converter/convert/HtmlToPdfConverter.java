@@ -12,7 +12,7 @@ public class HtmlToPdfConverter extends HtmlConverter {
     }
 
     @Override
-    public File convert(File file) {
+    public byte[] convert(File file) {
         return null;
     }
 }

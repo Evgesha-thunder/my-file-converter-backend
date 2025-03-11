@@ -12,7 +12,7 @@ public class DocxToPdfConverter extends DocxConverter {
     }
 
     @Override
-    public File convert(File file) {
+    public byte[] convert(File file) {
         return null;
     }
 }

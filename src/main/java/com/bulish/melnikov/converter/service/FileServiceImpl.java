@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,10 +27,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String saveFile(File file) throws IOException {
-        Path path = getNewPathForFile(file.getName());
+    public String saveFile(byte[] file, String formatTo, String fileName) throws IOException {
+        Path path = getNewPathForFile(getFileNameWithoutExtension(fileName) + "." + formatTo);
         Files.createDirectories(Paths.get(dirUpload));
-        Files.copy(file.toPath(), path);
+
+        try (FileOutputStream out = new FileOutputStream(path.toString())) {
+           out.write(file);
+           out.flush();
+        }
 
         return path.toString();
     }

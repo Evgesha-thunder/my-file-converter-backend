@@ -11,7 +11,7 @@ public class PdfToTextConverter extends PdfConverter {
     }
 
     @Override
-    public File convert(File file) {
+    public byte[] convert(File file) {
         return null;
     }
 }

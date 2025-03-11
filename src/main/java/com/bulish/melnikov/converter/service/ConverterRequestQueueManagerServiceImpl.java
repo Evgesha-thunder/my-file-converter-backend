@@ -1,38 +1,62 @@
 package com.bulish.melnikov.converter.service;
 
 import com.bulish.melnikov.converter.model.ConvertRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 @Service
+@Slf4j
 public class ConverterRequestQueueManagerServiceImpl implements ConverterRequestQueueManagerService {
 
     private final BlockingQueue<ConvertRequest> taskQueue = new LinkedBlockingQueue<>();
 
-    @Autowired
-    private  ConverterService converterService;
+    private final ConverterService converterService;
 
-    public ConverterRequestQueueManagerServiceImpl() {
+    private final ExecutorService executorService;
+    private volatile boolean running = true;
+
+    public ConverterRequestQueueManagerServiceImpl(ConverterService converterService) {
+        this.converterService = converterService;
+        this.executorService = Executors.newFixedThreadPool(4);
         new Thread(this::processQueue).start();
     }
 
-    public void addToTaskQueue(ConvertRequest request) {
-        taskQueue.add(request);
+    public void addRequestToQueue(ConvertRequest convertRequest) {
+        taskQueue.add(convertRequest);
     }
 
     private void processQueue() {
-        while (true) {
+        while (running) {
             try {
-                converterService.convert(taskQueue.take());
+                ConvertRequest request = taskQueue.take();
+                executorService.submit(() -> {
+                    try {
+                        converterService.convert(request);
+                    } catch (Exception e) {
+                        log.error("Error converting file", e);
+                    }
+                });
+
             } catch (InterruptedException e) {
+                log.warn("Queue processing was interrupted, but will continue processing pending requests.", e);
                 Thread.currentThread().interrupt();
-                break;
-            } catch (Exception e) {
-                throw new RuntimeException("Error processing task", e);
+                shutdown();
             }
+        }
+    }
+
+    public void shutdown() {
+        running = false;
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
         }
     }
 }

@@ -3,12 +3,16 @@ package com.bulish.melnikov.converter.service;
 import com.bulish.melnikov.converter.mapper.ConvertRequestToConvertResponseMapper;
 import com.bulish.melnikov.converter.model.ConvertRequest;
 import com.bulish.melnikov.converter.model.ConvertResponse;
+import com.bulish.melnikov.converter.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @AllArgsConstructor
@@ -36,15 +40,34 @@ public class ConverterFileServiceImpl implements ConverterFileService {
             throw new RuntimeException(e);
         }
 
-        if (filePath == null) {
-          throw new RuntimeException("Error uploading file");
-        }
-
-        ConvertRequest convertRequest = new ConvertRequest(filePath, formatFrom, formatTo);
+        ConvertRequest convertRequest = new ConvertRequest(filePath, formatTo, formatFrom);
         convertRequestService.save(convertRequest);
 
-        queueService.addToTaskQueue(convertRequest);
+        queueService.addRequestToQueue(convertRequest);
 
         return requestToConvertResponseMapper.convertRequestToConvertResponse(convertRequest);
+    }
+
+    @Override
+    public ConvertResponse getRequestStatusById(String id) {
+       ConvertRequest convertRequest = convertRequestService.get(id);
+
+        return requestToConvertResponseMapper.convertRequestToConvertResponse(convertRequest);
+    }
+
+    @Override
+    public byte[] downloadConvertedFile(String id) {
+        ConvertRequest convertRequest = convertRequestService.get(id);
+
+        if (convertRequest.getState() == State.CONVERTED) {
+            try {
+                return Files.readAllBytes(Paths.get(convertRequest.getConvertedFilePath()));
+            } catch (IOException e) {
+                throw new RuntimeException("Error downloading file", e);
+            }
+        } else {
+            log.error("File status " + convertRequest.getState() + " is not converted");
+            throw new RuntimeException("File status " + convertRequest.getState() + " is not converted");
+        }
     }
 }
