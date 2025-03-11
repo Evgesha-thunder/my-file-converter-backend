@@ -23,7 +23,7 @@ public class ConverterServiceImpl implements ConverterService {
     @Override
     public void convert(ConvertRequest request) {
         request.setState(State.CONVERTING);
-        convertRequestService.save(request);
+        convertRequestService.update(request);
 
         FileFabric fileFabric = converterFactory.getFactory(request.getFormatFrom());
         Converter converter = fileFabric.getConverter(request.getFormatTo());
