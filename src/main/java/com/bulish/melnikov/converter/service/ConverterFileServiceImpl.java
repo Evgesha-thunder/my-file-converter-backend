@@ -34,10 +34,10 @@ public class ConverterFileServiceImpl implements ConverterFileService {
         String formatFrom = fileService.getFileExtension(fileToConvert.getOriginalFilename());
 
         List<ExtensionDto> extensions = extensionService.getAllowedExtensions();
-        if (extensions.stream().filter(e -> e.getFormatFrom() == formatFrom
-                        && e.getFormatsTo().contains(formatTo)).count() == 0) {
+        if (!extensions.stream().anyMatch(e -> e.getFormatFrom().equals(formatFrom)
+                && e.getFormatsTo().contains(formatTo))) {
 
-            throw new IncorrectFormatExtensionException("Check available formats formatTo"
+            throw new IncorrectFormatExtensionException("Check available formats formatTo "
                     + formatTo + " or formatFrom " +  formatFrom + "are not supported");
         }
 
