@@ -1,8 +1,10 @@
 package com.bulish.melnikov.converter.service;
 
+import com.bulish.melnikov.converter.exception.IncorrectFormatExtensionException;
 import com.bulish.melnikov.converter.mapper.ConvertRequestToConvertResponseMapper;
 import com.bulish.melnikov.converter.model.ConvertRequest;
 import com.bulish.melnikov.converter.model.ConvertResponse;
+import com.bulish.melnikov.converter.model.ExtensionDto;
 import com.bulish.melnikov.converter.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +25,7 @@ public class ConverterFileServiceImpl implements ConverterFileService {
     private final ConverterRequestQueueManagerServiceImpl queueService;
     private final ConvertRequestToConvertResponseMapper requestToConvertResponseMapper;
     private final FileService fileService;
+    private final ExtensionService extensionService;
 
     private final String dirUpload = "temp/files/";
 
@@ -30,7 +33,13 @@ public class ConverterFileServiceImpl implements ConverterFileService {
     public ConvertResponse requestToConvert(MultipartFile fileToConvert, String formatTo) {
         String formatFrom = fileService.getFileExtension(fileToConvert.getOriginalFilename());
 
-        //TODO FORMATS VALIDATION
+        List<ExtensionDto> extensions = extensionService.getAllowedExtensions();
+        if (!extensions.stream().anyMatch(e -> e.getFormatFrom().equals(formatFrom)
+                && e.getFormatsTo().contains(formatTo))) {
+
+            throw new IncorrectFormatExtensionException("Check available formats formatTo "
+                    + formatTo + " or formatFrom " +  formatFrom + "are not supported");
+        }
 
         String filePath = null;
         try {
