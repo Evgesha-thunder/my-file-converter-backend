@@ -2,13 +2,19 @@ package com.bulish.melnikov.converter.service;
 
 import com.bulish.melnikov.converter.model.ConvertRequest;
 
+import java.util.List;
+
 public interface ConvertRequestService {
 
-    public ConvertRequest save(ConvertRequest convertRequest);
+    ConvertRequest save(ConvertRequest convertRequest);
 
-    public ConvertRequest get(String convertRequestId);
+    ConvertRequest get(String convertRequestId);
 
-    public ConvertRequest update(ConvertRequest convertRequest);
+    ConvertRequest update(ConvertRequest convertRequest);
 
-    public void delete(String convertRequestId);
+    void delete(String convertRequestId);
+
+    List<ConvertRequest> getOldConvertRequests();
+
+    void deleteOldConvertRequestWithFiles();
 }
