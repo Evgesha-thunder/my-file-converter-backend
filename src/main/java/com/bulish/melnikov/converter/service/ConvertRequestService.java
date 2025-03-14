@@ -11,4 +11,6 @@ public interface ConvertRequestService {
     ConvertRequest update(ConvertRequest convertRequest);
 
     void delete(String convertRequestId);
+
+    void deleteOldConvertRequestWithFiles();
 }

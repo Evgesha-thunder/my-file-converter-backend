@@ -20,5 +20,5 @@ public interface FileService {
 
      String saveFile(byte[] file, String formatTo, String fileName) throws IOException;
 
-     boolean deleteFile(String... filePaths) throws IOException;
+     void deleteFile(String... filePaths) throws IOException;
 }

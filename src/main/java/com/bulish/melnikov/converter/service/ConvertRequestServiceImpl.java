@@ -69,22 +69,15 @@ public class ConvertRequestServiceImpl implements ConvertRequestService {
 
     public void deleteOldConvertRequestWithFiles() {
         List<ConvertRequest> convertRequests = getOldConvertRequests();
-        boolean isDeleted = false;
 
-        try {
-            for (ConvertRequest request : convertRequests) {
-
-                if (request.getConvertedFilePath() != null) {
-                    isDeleted = fileService.deleteFile(request.getFilePath(), request.getConvertedFilePath());
-                } else {
-                    isDeleted = fileService.deleteFile(request.getFilePath());
-                }
-                if (!isDeleted) convertRequests.remove(request);
+        for (ConvertRequest request : convertRequests) {
+            try {
+                fileService.deleteFile(request.getFilePath(), request.getConvertedFilePath());
+            } catch (IOException e) {
+                convertRequests.remove(request);
+                log.error("Error while removing the file from local system");
             }
-        } catch (IOException e) {
-            log.error("Error while removing the file from local system");
         }
-
         if (!convertRequests.isEmpty()) requestRepo.deleteAll(convertRequests);
     }
 }
