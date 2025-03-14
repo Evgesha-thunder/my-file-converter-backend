@@ -82,11 +82,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void deleteFile(String filePath) {
-        try {
-            Files.deleteIfExists(Paths.get(filePath));
-        } catch (IOException e) {
-           log.error("error while deleting file by path " + filePath);
+    public boolean deleteFile(String... filePaths) throws IOException {
+        boolean isDeleted = true;
+
+        for (String path : filePaths) {
+            if (!Files.deleteIfExists(Paths.get(path))) {
+                isDeleted = false;
+            }
         }
+           return isDeleted;
     }
 }
