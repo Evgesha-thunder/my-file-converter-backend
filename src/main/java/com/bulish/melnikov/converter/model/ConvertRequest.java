@@ -2,16 +2,19 @@ package com.bulish.melnikov.converter.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 @Setter
 @RedisHash("Customer")
-public class ConvertRequest {
+@ToString
+public class ConvertRequest implements Serializable {
 
     @Id
     private String id;
@@ -26,7 +29,7 @@ public class ConvertRequest {
 
     private String formatFrom;
 
-    private Date convertionDate;
+    private LocalDateTime conversionDate;
 
     public ConvertRequest(String filePath, String formatTo, String formatFrom) {
         this.formatTo = formatTo;
@@ -34,6 +37,6 @@ public class ConvertRequest {
         this.filePath = filePath;
         this.state = State.INIT;
         this.id = UUID.randomUUID().toString();
-        this.convertionDate = new Date();
+        this.conversionDate = LocalDateTime.now();
     }
 }
