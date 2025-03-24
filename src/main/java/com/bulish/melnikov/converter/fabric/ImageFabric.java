@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ImageFileFabric extends FileFabric {
+public class ImageFabric extends Fabric {
 
     @Autowired
-    public ImageFileFabric(List<ImageConverter> converters) {
+    public ImageFabric(List<ImageConverter> converters) {
         super("image");
         for (ImageConverter converter : converters) {
             this.converters.put(converter.getFormat(), converter);

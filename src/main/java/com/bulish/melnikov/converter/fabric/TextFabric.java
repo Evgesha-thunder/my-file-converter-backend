@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class TextFileFabric extends FileFabric {
+public class TextFabric extends Fabric {
 
     @Autowired
-    public TextFileFabric(List<TextConverter> converters) {
+    public TextFabric(List<TextConverter> converters) {
         super("txt");
         for (TextConverter converter : converters) {
             this.converters.put(converter.getFormat(), converter);

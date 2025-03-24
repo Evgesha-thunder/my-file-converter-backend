@@ -1,10 +1,7 @@
 package com.bulish.melnikov.converter.service;
 
-import com.bulish.melnikov.converter.convert.Converter;
-import com.bulish.melnikov.converter.fabric.ConverterFactory;
-import com.bulish.melnikov.converter.fabric.FileFabric;
+
 import com.bulish.melnikov.converter.model.ConvertRequest;
-import com.bulish.melnikov.converter.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,8 +22,8 @@ public class ConverterServiceImpl implements ConverterService {
         request.setState(State.CONVERTING);
         convertRequestService.update(request);
 
-        FileFabric fileFabric = converterFactory.getFactory(request.getFormatFrom());
-        Converter converter = fileFabric.getConverter(request.getFormatTo());
+        Fabric fabric = converterFactory.getFactory(request.getFormatFrom());
+        Converter converter = fabric.getConverter(request.getFormatTo());
 
         File fileToConvert = fileService.getFile(request.getFilePath());
         String convertedFilePath = null;

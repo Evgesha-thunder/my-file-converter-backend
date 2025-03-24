@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class DocxFileFabric extends FileFabric {
+public class DocxFabric extends Fabric {
 
     @Autowired
-    public DocxFileFabric(List<DocxConverter> converters) {
+    public DocxFabric(List<DocxConverter> converters) {
         super("docx");
 
         for (DocxConverter converter : converters) {
