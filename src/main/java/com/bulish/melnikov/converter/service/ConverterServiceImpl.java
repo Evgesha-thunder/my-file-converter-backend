@@ -1,7 +1,11 @@
 package com.bulish.melnikov.converter.service;
 
 
+import com.bulish.melnikov.converter.convert.Converter;
+import com.bulish.melnikov.converter.fabric.ConverterFactory;
+import com.bulish.melnikov.converter.fabric.Fabric;
 import com.bulish.melnikov.converter.model.ConvertRequest;
+import com.bulish.melnikov.converter.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
