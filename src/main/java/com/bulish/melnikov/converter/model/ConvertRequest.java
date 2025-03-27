@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@RedisHash("Customer")
+@RedisHash("ConvertRequest")
 @ToString
 public class ConvertRequest implements Serializable {
 
