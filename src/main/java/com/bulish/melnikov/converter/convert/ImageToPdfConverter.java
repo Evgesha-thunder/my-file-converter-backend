@@ -2,8 +2,6 @@ package com.bulish.melnikov.converter.convert;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-
 @Component
 public class ImageToPdfConverter extends ImageConverter {
     public ImageToPdfConverter() {
@@ -11,7 +9,7 @@ public class ImageToPdfConverter extends ImageConverter {
     }
 
     @Override
-    public byte[] convert(File file) {
+    public byte[] convert(byte[] file) {
         return null;
     }
 }
