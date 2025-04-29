@@ -7,7 +7,6 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 
 @Component
@@ -17,7 +16,7 @@ public class PdfToDocxConverter extends PdfConverter {
     }
 
     @Override
-    public byte[] convert(File file) {
+    public byte[] convert(byte[] file) {
         byte [] converterFile = null;
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();

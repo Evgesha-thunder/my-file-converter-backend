@@ -13,7 +13,7 @@ public class ExtensionServiceImpl implements ExtensionService {
     static {
         extensions = List.of(
                 new ExtensionDto("pdf", List.of("html", "text", "docx"), 10),
-                new ExtensionDto("hml", List.of("pdf"), 10),
+                new ExtensionDto("html", List.of("pdf"), 10),
                 new ExtensionDto("docx", List.of("pdf"), 10),
                 new ExtensionDto("text", List.of("pdf"), 10)
                 );

@@ -19,7 +19,7 @@ public class PdfToHtmlConverter extends PdfConverter {
     }
 
     @Override
-    public byte[] convert(File file) {
+    public byte[] convert(byte[] file) {
 
         try(ByteArrayOutputStream baos = new ByteArrayOutputStream();
             OutputStreamWriter writer = new OutputStreamWriter(baos, "utf-8");

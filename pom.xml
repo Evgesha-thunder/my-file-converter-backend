@@ -10,7 +10,7 @@
 		<relativePath>../my-bom-converter-backend/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>JnD-converter</artifactId>
+	<artifactId>my-file-converter-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>JnD-converter</name>
 	<description>Converter project</description>
@@ -25,6 +25,14 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.ooxml.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
 		</dependency>
 	</dependencies>
 

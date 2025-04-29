@@ -2,8 +2,6 @@ package com.bulish.melnikov.converter.convert;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-
 @Component
 public class DocxToPdfConverter extends DocxConverter {
 
@@ -12,7 +10,7 @@ public class DocxToPdfConverter extends DocxConverter {
     }
 
     @Override
-    public byte[] convert(File file) {
+    public byte[] convert(byte[] file) {
         return null;
     }
 }
