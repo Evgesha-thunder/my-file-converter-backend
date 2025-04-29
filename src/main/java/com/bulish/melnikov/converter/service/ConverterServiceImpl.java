@@ -26,7 +26,7 @@ public class ConverterServiceImpl implements ConverterService {
     private final ExtensionService extensionService;
     private final StreamBridge streamBridge;
 
-    @Value("${convert.file.response.destination}")
+    @Value("${convert.response.destination}")
     private String destination;
 
     @Override
@@ -58,6 +58,7 @@ public class ConverterServiceImpl implements ConverterService {
                         .file(convertedFile)
                         .formatFrom(formatFrom)
                         .formatTo(formatTo)
+                        .id(request.getId())
                         .build());
             } else {
                 throw new RuntimeException("converted file array is empty");
